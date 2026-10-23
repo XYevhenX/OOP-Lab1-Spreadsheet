@@ -1,41 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="SpreadsheetApp.MainPage">
+             xmlns:vm="clr-namespace:SpreadsheetApp.ViewModels"
+             x:Class="SpreadsheetApp.MainPage"
+             Title="Електронна таблиця (Вар. 81)">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <ContentPage.BindingContext>
+        <vm:MainViewModel />
+    </ContentPage.BindingContext>
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
+    <Grid RowDefinitions="Auto, *">
+        <VerticalStackLayout Grid.Row="0" Spacing="10" Padding="10" BackgroundColor="#f0f0f0">
+            <Label Text="Лабораторна робота 1 - Аналіз логічних виразів" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
+            <Label Text="{Binding ModeText}" FontSize="16" TextColor="DarkBlue" HorizontalOptions="Center" />
 
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="Обчислити" Command="{Binding EvaluateCommand}" BackgroundColor="Green" TextColor="White" />
+                <Button Text="Змінити режим" Command="{Binding ToggleModeCommand}" BackgroundColor="Blue" TextColor="White" />
+                <Button Text="Довідка" Clicked="OnHelpClicked" BackgroundColor="Gray" TextColor="White" />
+            </HorizontalStackLayout>
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
-
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
-
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="+ Рядок" Command="{Binding AddRowCommand}" />
+                <Button Text="- Рядок" Command="{Binding RemoveRowCommand}" />
+                <Button Text="+ Стовпець" Command="{Binding AddColumnCommand}" />
+                <Button Text="- Стовпець" Command="{Binding RemoveColumnCommand}" />
+            </HorizontalStackLayout>
         </VerticalStackLayout>
-    </ScrollView>
 
+        <ScrollView Grid.Row="1" Orientation="Both" Padding="10">
+            <Grid x:Name="SpreadsheetGrid" ColumnSpacing="2" RowSpacing="2" />
+        </ScrollView>
+    </Grid>
 </ContentPage>
