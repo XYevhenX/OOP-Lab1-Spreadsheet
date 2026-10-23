@@ -34,13 +34,13 @@ namespace SpreadsheetApp
             for (int c = 0; c < cols; c++)
             {
                 string colName = GetColumnName(c);
-                var label = new Label { Text = colName, FontAttributes = FontAttributes.Bold, HorizontalTextAlignment = TextAlignment.Center };
+                var label = new Label { Text = colName, FontAttributes = FontAttributes.Bold, HorizontalTextAlignment = TextAlignment.Center, TextColor = Colors.LightGray };
                 SpreadsheetGrid.Add(label, c + 1, 0);
             }
 
             for (int r = 0; r < rows; r++)
             {
-                var label = new Label { Text = (r + 1).ToString(), FontAttributes = FontAttributes.Bold, VerticalTextAlignment = TextAlignment.Center };
+                var label = new Label { Text = (r + 1).ToString(), FontAttributes = FontAttributes.Bold, VerticalTextAlignment = TextAlignment.Center, TextColor = Colors.LightGray };
                 SpreadsheetGrid.Add(label, 0, r + 1);
             }
 
@@ -55,7 +55,7 @@ namespace SpreadsheetApp
 
                     if (_viewModel.IsExpressionMode)
                     {
-                        var entry = new Entry { Text = cell.Expression, BackgroundColor = Colors.White };
+                        var entry = new Entry { Text = cell.Expression, BackgroundColor = Color.FromArgb("#333337"), TextColor = Colors.White };
                         entry.TextChanged += (s, e) => cell.UpdateExpression(e.NewTextValue);
                         cellView = entry;
                     }
@@ -68,8 +68,8 @@ namespace SpreadsheetApp
                         var label = new Label
                         {
                             Text = displayValue,
-                            TextColor = string.IsNullOrEmpty(cell.ErrorMessage) ? Colors.Black : Colors.Red,
-                            BackgroundColor = Colors.LightGray,
+                            TextColor = string.IsNullOrEmpty(cell.ErrorMessage) ? Colors.White : Colors.LightCoral,
+                            BackgroundColor = Color.FromArgb("#2d2d30"),
                             VerticalTextAlignment = TextAlignment.Center,
                             HorizontalTextAlignment = TextAlignment.Center,
                             HeightRequest = 45

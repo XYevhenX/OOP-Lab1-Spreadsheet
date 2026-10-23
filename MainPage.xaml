@@ -3,28 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SpreadsheetApp.ViewModels"
              x:Class="SpreadsheetApp.MainPage"
-             Title="Електронна таблиця (Вар. 81)">
+             Title="Електронна таблиця (Вар. 81)"
+             BackgroundColor="#1e1e1e">
 
     <ContentPage.BindingContext>
         <vm:MainViewModel />
     </ContentPage.BindingContext>
 
     <Grid RowDefinitions="Auto, *">
-        <VerticalStackLayout Grid.Row="0" Spacing="10" Padding="10" BackgroundColor="#f0f0f0">
-            <Label Text="Лабораторна робота 1 - Аналіз логічних виразів" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" />
-            <Label Text="{Binding ModeText}" FontSize="16" TextColor="DarkBlue" HorizontalOptions="Center" />
+        <VerticalStackLayout Grid.Row="0" Spacing="10" Padding="10" BackgroundColor="#252526">
+            <Label Text="Лабораторна робота 1 - Аналіз логічних виразів" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" TextColor="White" />
+            <Label Text="{Binding ModeText}" FontSize="16" TextColor="#569cd6" HorizontalOptions="Center" />
 
             <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                <Button Text="Обчислити" Command="{Binding EvaluateCommand}" BackgroundColor="Green" TextColor="White" />
-                <Button Text="Змінити режим" Command="{Binding ToggleModeCommand}" BackgroundColor="Blue" TextColor="White" />
-                <Button Text="Довідка" Clicked="OnHelpClicked" BackgroundColor="Gray" TextColor="White" />
+                <Button Text="Обчислити" Command="{Binding EvaluateCommand}" BackgroundColor="#198754" TextColor="White" />
+                <Button Text="Змінити режим" Command="{Binding ToggleModeCommand}" BackgroundColor="#0d6efd" TextColor="White" />
+                <Button Text="Довідка" Clicked="OnHelpClicked" BackgroundColor="#6c757d" TextColor="White" />
             </HorizontalStackLayout>
 
             <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                <Button Text="+ Рядок" Command="{Binding AddRowCommand}" />
-                <Button Text="- Рядок" Command="{Binding RemoveRowCommand}" />
-                <Button Text="+ Стовпець" Command="{Binding AddColumnCommand}" />
-                <Button Text="- Стовпець" Command="{Binding RemoveColumnCommand}" />
+                <Button Text="+ Рядок" Command="{Binding AddRowCommand}" BackgroundColor="#333337" TextColor="White" />
+                <Button Text="- Рядок" Command="{Binding RemoveRowCommand}" BackgroundColor="#333337" TextColor="White" />
+                <Button Text="+ Стовпець" Command="{Binding AddColumnCommand}" BackgroundColor="#333337" TextColor="White" />
+                <Button Text="- Стовпець" Command="{Binding RemoveColumnCommand}" BackgroundColor="#333337" TextColor="White" />
             </HorizontalStackLayout>
         </VerticalStackLayout>
 

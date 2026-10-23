@@ -1,0 +1,1 @@
+C:\Users\evgen\OneDrive\Документы\Projects\C#\SpreadsheetApp\SpreadsheetApp.csproj;x64
