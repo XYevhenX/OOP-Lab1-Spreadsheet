@@ -11,19 +11,8 @@ namespace SpreadsheetApp.Parsing
         private int _pos;
 
         public int GetErrorPosition() => _errorPosition;
-
-        public bool CheckSyntax(string expr)
-        {
-            try
-            {
-                ParseToAST(expr);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
+        private List<Token> _tokens;
+        private int _tokenIndex;
 
         public ASTNode ParseToAST(string expr)
         {
@@ -37,11 +26,128 @@ namespace SpreadsheetApp.Parsing
             _text = expr;
             _pos = 0;
 
-            List<Token> tokens = Tokenize();
+            _tokens = Tokenize();
+            _tokenIndex = 0;
 
-            return null;
+            if (_tokens.Count == 0 || _tokens[0].Type == TokenType.EOF)
+                throw new SyntaxException("Вираз порожній", 0);
+
+            var ast = ParseEqv();
+
+            if (CurrentToken().Type != TokenType.EOF)
+            {
+                _errorPosition = CurrentToken().Position;
+                throw new SyntaxException($"Неочікуваний символ: {CurrentToken().Value}", _errorPosition);
+            }
+
+            return ast;
         }
 
+        private Token CurrentToken() => _tokenIndex < _tokens.Count ? _tokens[_tokenIndex] : _tokens[_tokens.Count - 1];
+
+        private void Advance() { if (_tokenIndex < _tokens.Count) _tokenIndex++; }
+
+        private void Match(TokenType type)
+        {
+            if (CurrentToken().Type == type) Advance();
+            else
+            {
+                _errorPosition = CurrentToken().Position;
+                throw new SyntaxException($"Очікувався токен {type}", _errorPosition);
+            }
+        }
+
+        private ASTNode ParseEqv()
+        {
+            var node = ParseOr();
+            while (CurrentToken().Type == TokenType.Eqv)
+            {
+                var op = CurrentToken().Value;
+                Advance();
+                var right = ParseOr();
+                node = new BinaryOpNode(node, right, op);
+            }
+            return node;
+        }
+
+        private ASTNode ParseOr()
+        {
+            var node = ParseAnd();
+            while (CurrentToken().Type == TokenType.Or)
+            {
+                var op = CurrentToken().Value;
+                Advance();
+                var right = ParseAnd();
+                node = new BinaryOpNode(node, right, op);
+            }
+            return node;
+        }
+
+        private ASTNode ParseAnd()
+        {
+            var node = ParseComparison();
+            while (CurrentToken().Type == TokenType.And)
+            {
+                var op = CurrentToken().Value;
+                Advance();
+                var right = ParseComparison();
+                node = new BinaryOpNode(node, right, op);
+            }
+            return node;
+        }
+
+        private ASTNode ParseComparison()
+        {
+            var node = ParseUnary();
+            while (CurrentToken().Type == TokenType.Equal || CurrentToken().Type == TokenType.NotEqual ||
+                   CurrentToken().Type == TokenType.Less || CurrentToken().Type == TokenType.LessOrEqual ||
+                   CurrentToken().Type == TokenType.Greater || CurrentToken().Type == TokenType.GreaterOrEqual)
+            {
+                var op = CurrentToken().Value;
+                Advance();
+                var right = ParseUnary();
+                node = new BinaryOpNode(node, right, op);
+            }
+            return node;
+        }
+
+        private ASTNode ParseUnary()
+        {
+            if (CurrentToken().Type == TokenType.Not)
+            {
+                var op = CurrentToken().Value;
+                Advance();
+                var operand = ParseUnary();
+                return new UnaryOpNode(operand, op);
+            }
+            return ParsePrimary();
+        }
+
+        private ASTNode ParsePrimary()
+        {
+            if (CurrentToken().Type == TokenType.Number)
+            {
+                var val = System.Numerics.BigInteger.Parse(CurrentToken().Value);
+                Advance();
+                return new NumberNode(val);
+            }
+            if (CurrentToken().Type == TokenType.CellReference)
+            {
+                var name = CurrentToken().Value;
+                Advance();
+                return new CellReferenceNode(name);
+            }
+            if (CurrentToken().Type == TokenType.LParen)
+            {
+                Advance();
+                var node = ParseEqv();
+                Match(TokenType.RParen);
+                return node;
+            }
+
+            _errorPosition = CurrentToken().Position;
+            throw new SyntaxException($"Неочікуваний токен: {CurrentToken().Value}", _errorPosition);
+        }
         private List<Token> Tokenize()
         {
             var tokens = new List<Token>();
