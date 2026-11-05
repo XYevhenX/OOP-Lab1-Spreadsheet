@@ -94,10 +94,33 @@ namespace SpreadsheetApp.ViewModels
             {
                 if (IsModified)
                 {
-                    bool answer = await Application.Current.MainPage.DisplayAlert("Увага", "Зберегти зміни перед виходом?", "Так", "Ні");
-                    if (answer) SaveToFile();
+                    string action = await Application.Current.MainPage.DisplayActionSheet(
+                        "Увага! Є незбережені зміни.\n Що зробити?",
+                        "Скасувати",
+                        null,
+                        "Зберегти та вийти",
+                        "Вийти без збереження");
+
+                    if (action == "Скасувати" || string.IsNullOrEmpty(action))
+                    {
+                        return;
+                    }
+
+                    if (action == "Зберегти та вийти")
+                    {
+                        SaveToFile();
+                        await System.Threading.Tasks.Task.Delay(500);
+                        Application.Current.Quit();
+                    }
+                    else if (action == "Вийти без збереження")
+                    {
+                        Application.Current.Quit();
+                    }
                 }
-                Application.Current.Quit();
+                else
+                {
+                    Application.Current.Quit();
+                }
             });
         }
 

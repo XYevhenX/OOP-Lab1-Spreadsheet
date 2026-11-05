@@ -18,7 +18,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SpreadsheetApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+de03425f9473b8c96f8fffe1f5ad961345e8572e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+23e0e855c3698788ecd80d69414f5dddfee1d3a7")]
 [assembly: System.Reflection.AssemblyProductAttribute("SpreadsheetApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SpreadsheetApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

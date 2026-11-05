@@ -54,7 +54,11 @@ namespace SpreadsheetApp
                     if (_viewModel.IsExpressionMode)
                     {
                         var entry = new Entry { Text = cell.Expression, BackgroundColor = Color.FromArgb("#333337"), TextColor = Colors.White };
-                        entry.TextChanged += (s, e) => cell.UpdateExpression(e.NewTextValue);
+                        entry.TextChanged += (s, e) =>
+                        {
+                            cell.UpdateExpression(e.NewTextValue);
+                            _viewModel.IsModified = true;
+                        };
                         cellView = entry;
                     }
                     else
