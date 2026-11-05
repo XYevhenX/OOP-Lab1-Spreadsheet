@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace SpreadsheetApp.Parsing
 {
@@ -18,17 +19,21 @@ namespace SpreadsheetApp.Parsing
             object result = EvaluateNode(ast);
 
             if (result is bool boolResult)
-            {
                 return boolResult;
-            }
 
-            throw new Exception("Кінцевий результат виразу не є логічним значенням.");
+            if (result is BigInteger numResult)
+                return numResult != 0;
+
+            throw new Exception("Кінцевий результат виразу не вдалося звести до логічного значення.");
         }
 
         private object EvaluateNode(ASTNode node)
         {
             if (node is NumberNode numberNode)
                 return numberNode.Value;
+
+            if (node is BooleanNode boolNode)
+                return boolNode.Value;
 
             if (node is CellReferenceNode cellNode)
             {
@@ -44,8 +49,7 @@ namespace SpreadsheetApp.Parsing
 
                 if (unaryNode.Operator.ToLower() == "not")
                 {
-                    if (operand is bool b) return !b;
-                    throw new Exception("Оператор NOT застосовується тільки до логічних значень.");
+                    return !ToBool(operand);
                 }
                 throw new Exception($"Невідомий унарний оператор: {unaryNode.Operator}");
             }
@@ -58,17 +62,15 @@ namespace SpreadsheetApp.Parsing
 
                 if (op == "and" || op == "or" || op == "eqv")
                 {
-                    if (left is bool lb && right is bool rb)
+                    bool lb = ToBool(left);
+                    bool rb = ToBool(right);
+                    return op switch
                     {
-                        return op switch
-                        {
-                            "and" => lb && rb,
-                            "or" => lb || rb,
-                            "eqv" => lb == rb,
-                            _ => throw new Exception($"Невідомий логічний оператор: {op}")
-                        };
-                    }
-                    throw new Exception($"Оператор '{op}' очікує логічні операнди.");
+                        "and" => lb && rb,
+                        "or" => lb || rb,
+                        "eqv" => lb == rb,
+                        _ => throw new Exception($"Невідомий логічний оператор: {op}")
+                    };
                 }
 
                 if (left is BigInteger li && right is BigInteger ri)
@@ -85,20 +87,24 @@ namespace SpreadsheetApp.Parsing
                     };
                 }
 
-                if (left is bool lbool && right is bool rbool)
+                if (op == "=" || op == "<>")
                 {
-                    return op switch
-                    {
-                        "=" => lbool == rbool,
-                        "<>" => lbool != rbool,
-                        _ => throw new Exception($"Оператор '{op}' не підтримується для порівняння логічних значень.")
-                    };
+                    bool lb = ToBool(left);
+                    bool rb = ToBool(right);
+                    return op == "=" ? lb == rb : lb != rb;
                 }
 
                 throw new Exception("Несумісні типи операндів для виконання операції.");
             }
 
             throw new Exception("Невідомий тип вузла синтаксичного дерева.");
+        }
+
+        private bool ToBool(object value)
+        {
+            if (value is bool b) return b;
+            if (value is BigInteger num) return num != 0;
+            throw new Exception("Неможливо звести операнд до логічного значення.");
         }
     }
 }

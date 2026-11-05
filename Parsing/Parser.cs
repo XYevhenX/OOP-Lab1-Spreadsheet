@@ -129,6 +129,12 @@ namespace SpreadsheetApp.Parsing
                 Advance();
                 return new NumberNode(val);
             }
+            if (CurrentToken().Type == TokenType.BooleanLiteral)
+            {
+                bool val = bool.Parse(CurrentToken().Value);
+                Advance();
+                return new BooleanNode(val);
+            }
             if (CurrentToken().Type == TokenType.CellReference)
             {
                 var name = CurrentToken().Value;
@@ -227,6 +233,8 @@ namespace SpreadsheetApp.Parsing
 
             return value.ToLower() switch
             {
+                "true" => new Token(TokenType.Number, "true", start),
+                "false" => new Token(TokenType.Number, "false", start),
                 "not" => new Token(TokenType.Not, value, start),
                 "and" => new Token(TokenType.And, value, start),
                 "or" => new Token(TokenType.Or, value, start),
