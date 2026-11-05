@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using SpreadsheetApp.ViewModels;
-using System;
+﻿using SpreadsheetApp.ViewModels;
 
 namespace SpreadsheetApp
 {

@@ -1,7 +1,4 @@
-﻿using Android.App;
-using Android.Runtime;
-
-namespace SpreadsheetApp
+﻿namespace SpreadsheetApp
 {
     [Application]
     public class MainApplication : MauiApplication

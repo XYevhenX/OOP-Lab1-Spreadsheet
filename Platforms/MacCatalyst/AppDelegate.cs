@@ -1,6 +1,4 @@
-﻿using Foundation;
-
-namespace SpreadsheetApp
+﻿namespace SpreadsheetApp
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

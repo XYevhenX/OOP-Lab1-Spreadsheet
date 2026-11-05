@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SpreadsheetApp.Parsing.Exceptions
+﻿namespace SpreadsheetApp.Parsing.Exceptions
 {
     public class SyntaxException : Exception
     {

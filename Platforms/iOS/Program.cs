@@ -1,7 +1,4 @@
-﻿using ObjCRuntime;
-using UIKit;
-
-namespace SpreadsheetApp
+﻿namespace SpreadsheetApp
 {
     public class Program
     {
