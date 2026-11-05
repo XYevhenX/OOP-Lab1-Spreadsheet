@@ -150,7 +150,7 @@ namespace SpreadsheetApp.Parsing
             }
 
             _errorPosition = CurrentToken().Position;
-            throw new SyntaxException($"Неочікуваний токен: {CurrentToken().Value}", _errorPosition);
+            throw new Exceptions.SyntaxException($"Неочікуваний токен: {CurrentToken().Value}", _errorPosition);
         }
         private List<Token> Tokenize()
         {
@@ -233,8 +233,8 @@ namespace SpreadsheetApp.Parsing
 
             return value.ToLower() switch
             {
-                "true" => new Token(TokenType.Number, "true", start),
-                "false" => new Token(TokenType.Number, "false", start),
+                "true" => new Token(TokenType.BooleanLiteral, "true", start),
+                "false" => new Token(TokenType.BooleanLiteral, "false", start),
                 "not" => new Token(TokenType.Not, value, start),
                 "and" => new Token(TokenType.And, value, start),
                 "or" => new Token(TokenType.Or, value, start),

@@ -2,7 +2,7 @@
 {
     public enum TokenType
     {
-        Number, CellReference,
+        Number, CellReference, BooleanLiteral,
         Equal, Less, Greater, LessOrEqual, GreaterOrEqual, NotEqual,
         Not, Or, And, Eqv,
         LParen, RParen, EOF

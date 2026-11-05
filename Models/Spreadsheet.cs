@@ -161,5 +161,11 @@ namespace SpreadsheetApp.Models
         {
             return EvaluateCellRecursively(cellName);
         }
+        public Cell GetCell(int row, int col)
+        {
+            if (row >= 0 && row < RowCount && col >= 0 && col < ColCount)
+                return _cells[row, col];
+            return null;
+        }
     }
 }

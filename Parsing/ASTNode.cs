@@ -41,4 +41,9 @@ namespace SpreadsheetApp.Parsing
             Operator = op;
         }
     }
+    public class BooleanNode : ASTNode
+    {
+        public bool Value { get; }
+        public BooleanNode(bool value) { Value = value; }
+    }
 }
